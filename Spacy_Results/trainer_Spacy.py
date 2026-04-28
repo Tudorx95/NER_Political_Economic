@@ -10,7 +10,7 @@ MODEL_OUT_DIR = BASE_DIR / "spacy_finetuned"
 MODEL_OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # ─── Hiperparametri ──────────────────────────────────────────
-NUM_EPOCHS       = 1
+NUM_EPOCHS       = 15
 BATCH_SIZE       = 8
 LEARNING_RATE    = 2e-5                     # learning rate pt fine-tuning NER head
 DROP_RATE        = 0.35                     # dropout pt NER layer

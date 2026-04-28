@@ -2,54 +2,54 @@
 
 # 🌐 NER Political & Economic — End-to-End ML Pipeline
 
-**Extragerea automată a entităților politice și economice din text folosind NLP**
+**Automatic extraction of political and economic entities from text using NLP**
 
 [![HuggingFace Dataset](https://img.shields.io/badge/🤗_Dataset-NER__Political__Economic-yellow)](https://huggingface.co/datasets/Tudorx95/NER_Political_Economic)
 [![HuggingFace GLiNER](https://img.shields.io/badge/🤗_Model-GLiNER-blue)](https://huggingface.co/Tudorx95/NER_Economic_Political)
 [![HuggingFace spaCy](https://img.shields.io/badge/🤗_Model-spaCy-green)](https://huggingface.co/Tudorx95/NER_Economic_Political_Spacy)
-[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)](./ner-demo/docker-compose.yml)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)](./docker-compose.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](LICENSE)
-
 
 </div>
 
 ---
 
-## 📑 Cuprins
+## 📑 Table of Contents
 
-- [Descriere](#-descriere)
-- [Arhitectura Proiectului](#-arhitectura-proiectului)
-- [Resurse Externe (HuggingFace)](#-resurse-externe-huggingface)
-- [Schema NER — 11 Tipuri de Entități](#-schema-ner--11-tipuri-de-entități)
-- [Pipeline-ul ML](#-pipeline-ul-ml)
-- [Rezultate](#-rezultate)
-- [Quick Start — Rulare Locală](#-quick-start--rulare-locală)
-- [Structura Repository-ului](#-structura-repository-ului)
-- [Tehnologii Utilizate](#-tehnologii-utilizate)
-- [Autor](#-autor)
-
----
-
-## 📖 Descriere
-
-Acest proiect implementează un **pipeline complet de Machine Learning** pentru recunoașterea entităților denumite (Named Entity Recognition — NER) din domeniul **politic și economic**. 
-
-Proiectul acoperă toate etapele:
-
-1. **Colectarea datelor** din surse multiple (CC-News, Wikipedia, SEC EDGAR, CoNLL-2003, WNUT-17)
-2. **Weak Supervision cu Snorkel** — etichetare programatică folosind 14 Labeling Functions
-3. **Augmentare sintetică** pentru clasele sub-reprezentate
-4. **Fine-tuning** pe două arhitecturi diferite: **GLiNER** (zero-shot capable) și **spaCy** (transformer-based)
-5. **Deployment** într-o aplicație full-stack containerizată cu Docker (React + FastAPI + Nginx)
+- [Description](#-description)
+- [Project Architecture](#-project-architecture)
+- [External Resources (HuggingFace)](#-external-resources-huggingface)
+- [NER Schema — 11 Entity Types](#-ner-schema--11-entity-types)
+- [ML Pipeline](#-ml-pipeline)
+- [Results](#-results)
+- [⚡ Quick Deployment — Pre-built Docker Images](#-quick-deployment--pre-built-docker-images)
+- [Quick Start — Local Build](#-quick-start--local-build)
+- [Repository Structure](#-repository-structure)
+- [Technologies Used](#-technologies-used)
+- [Author](#-author)
 
 ---
 
-## 🏗 Arhitectura Proiectului
+## 📖 Description
+
+This project implements a **complete Machine Learning pipeline** for Named Entity Recognition (NER) in the **political and economic** domain.
+
+The project covers all stages:
+
+1. **Data collection** from multiple sources (CC-News, Wikipedia, SEC EDGAR, CoNLL-2003, WNUT-17)
+2. **Weak Supervision with Snorkel** — programmatic labeling using 14 Labeling Functions
+3. **Synthetic augmentation** for underrepresented classes
+4. **Fine-tuning** on two different architectures: **GLiNER** (zero-shot capable) and **spaCy** (transformer-based)
+5. **Deployment** in a fully containerized full-stack application with Docker (React + FastAPI + Nginx + MongoDB)
+
+---
+
+## 🏗 Project Architecture
 
 ```
 ┌──────────────────────────────────────────────────────────────────────┐
 │                        📦 GitHub Repository                         │
-│                   (Cod sursă, Notebooks, Aplicație)                  │
+│                   (Source Code, Notebooks, Application)              │
 ├──────────────────────────────────────────────────────────────────────┤
 │                                                                      │
 │  ┌─────────────────┐   ┌─────────────────┐   ┌───────────────────┐  │
@@ -68,7 +68,7 @@ Proiectul acoperă toate etapele:
 │                                                                      │
 │  ┌──────────────────┐  ┌──────────────────┐  ┌───────────────────┐  │
 │  │  🗄️ Dataset       │  │  🧠 Model GLiNER │  │  🧠 Model spaCy   │  │
-│  │  9.1k exemple    │  │  F1: 0.7789      │  │  F1: 0.8245       │  │
+│  │  9.1k examples   │  │  F1: 0.7789      │  │  F1: 0.8245       │  │
 │  │  11 labels       │  │  Zero-Shot NER   │  │  RoBERTa-base     │  │
 │  └──────────────────┘  └──────────────────┘  └───────────────────┘  │
 └──────────────────────────────────────────────────────────────────────┘
@@ -76,65 +76,67 @@ Proiectul acoperă toate etapele:
 
 ---
 
-## 🤗 Resurse Externe (HuggingFace)
+## 🤗 External Resources (HuggingFace)
 
-| Resursă | Link | Descriere |
-|---------|------|-----------|
-| 🗄️ **Dataset** | [`Tudorx95/NER_Political_Economic`](https://huggingface.co/datasets/Tudorx95/NER_Political_Economic) | ~9.100 exemple, 11 tipuri de entități, creat prin Snorkel + surse multiple |
-| 🧠 **Model GLiNER** | [`Tudorx95/NER_Economic_Political`](https://huggingface.co/Tudorx95/NER_Economic_Political) | Fine-tuned `gliner_small-v2.1`, suportă zero-shot NER |
-| 🧠 **Model spaCy** | [`Tudorx95/NER_Economic_Political_Spacy`](https://huggingface.co/Tudorx95/NER_Economic_Political_Spacy) | Fine-tuned `en_core_web_trf` (RoBERTa-base backbone) |
+| Resource            | Link                                                                                                    | Description                                                             |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| 🗄️ **Dataset**      | [`Tudorx95/NER_Political_Economic`](https://huggingface.co/datasets/Tudorx95/NER_Political_Economic)    | ~9,100 examples, 11 entity types, built with Snorkel + multiple sources |
+| 🧠 **GLiNER Model** | [`Tudorx95/NER_Economic_Political`](https://huggingface.co/Tudorx95/NER_Economic_Political)             | Fine-tuned `gliner_small-v2.1`, supports zero-shot NER                  |
+| 🧠 **spaCy Model**  | [`Tudorx95/NER_Economic_Political_Spacy`](https://huggingface.co/Tudorx95/NER_Economic_Political_Spacy) | Fine-tuned `en_core_web_trf` (RoBERTa-base backbone)                    |
 
-> **Notă:** Modelele sunt descărcate automat de pe HuggingFace Hub la prima pornire a aplicației.
-
----
-
-## 🏷 Schema NER — 11 Tipuri de Entități
-
-| Entitate | Descriere | Exemplu |
-|----------|-----------|---------|
-| `POLITICIAN` | Persoane politice | *Joe Biden*, *Christine Lagarde* |
-| `POLITICAL_PARTY` | Partide politice | *Republican Party*, *CDU* |
-| `POLITICAL_ORG` | Organizații politice | *NATO*, *European Union*, *G7* |
-| `FINANCIAL_ORG` | Organizații financiare | *Federal Reserve*, *IMF*, *Goldman Sachs* |
-| `ECONOMIC_INDICATOR` | Indicatori economici | *GDP*, *CPI*, *unemployment rate* |
-| `POLICY` | Politici guvernamentale | *quantitative easing*, *rate hike* |
-| `LEGISLATION` | Acte legislative | *Dodd-Frank Act*, *CHIPS Act* |
-| `MARKET_EVENT` | Evenimente de piață | *2008 financial crisis*, *Great Recession* |
-| `CURRENCY` | Monede | *USD*, *euro*, *Bitcoin* |
-| `TRADE_AGREEMENT` | Acorduri comerciale | *NAFTA*, *USMCA*, *TPP* |
-| `GPE` | Entități geopolitice | *United States*, *China*, *Germany* |
+> **Note:** Models are downloaded automatically from HuggingFace Hub on first application startup.
 
 ---
 
-## 🔬 Pipeline-ul ML
+## 🏷 NER Schema — 11 Entity Types
 
-### 1. Colectarea Datelor (`dataset/`)
+| Entity               | Description                      | Example                                    |
+| -------------------- | -------------------------------- | ------------------------------------------ |
+| `POLITICIAN`         | Persons holding political office | _Joe Biden_, _Christine Lagarde_           |
+| `POLITICAL_PARTY`    | Political parties                | _Republican Party_, _CDU_                  |
+| `POLITICAL_ORG`      | Political organizations          | _NATO_, _European Union_, _G7_             |
+| `FINANCIAL_ORG`      | Financial organizations          | _Federal Reserve_, _IMF_, _Goldman Sachs_  |
+| `ECONOMIC_INDICATOR` | Economic indicators              | _GDP_, _CPI_, _unemployment rate_          |
+| `POLICY`             | Government policies              | _quantitative easing_, _rate hike_         |
+| `LEGISLATION`        | Legislative acts                 | _Dodd-Frank Act_, _CHIPS Act_              |
+| `MARKET_EVENT`       | Market events                    | _2008 financial crisis_, _Great Recession_ |
+| `CURRENCY`           | Currencies                       | _USD_, _euro_, _Bitcoin_                   |
+| `TRADE_AGREEMENT`    | Trade agreements                 | _NAFTA_, _USMCA_, _TPP_                    |
+| `GPE`                | Geopolitical entities            | _United States_, _China_, _Germany_        |
 
-Datele provin din **5 surse complementare**:
+---
 
-| Sursă | Metoda | Rol |
-|-------|--------|-----|
-| **CC-News** | Filtrare pe keywords politico-economice, procesat cu spaCy | Volum mare, diversitate lingvistică |
-| **Wikipedia** | API `wikipediaapi`, articole despre politicieni, organizații, concepte economice | Calitate ridicată, fapte verificabile |
-| **SEC EDGAR** | Rapoarte 10-K descărcate automat | Limbaj financiar real |
-| **CoNLL-2003** | Remapare din schema BIO (`PER`→`POLITICIAN`, `ORG`→`FINANCIAL_ORG`/`POLITICAL_ORG`, etc.) | Date etichetate profesional |
-| **WNUT-2017** | Remapare similară cu CoNLL | Texte din social media, diversitate stilistică |
+## 🔬 ML Pipeline
 
-### 2. Weak Supervision cu Snorkel
+### 1. Data Collection (`dataset/`)
 
-În loc de etichetare manuală costisitoare, am folosit **Snorkel** pentru a genera pseudo-etichete:
+> **Compute environment:** The dataset was built in **Google Colab** using a **Tesla T4 GPU**.
 
-- **14 Labeling Functions (LF)** bazate pe:
-  - 📚 Gazetteers (liste de politicieni, organizații, indicatori)
-  - 🔍 Pattern-matching regex (titluri politice, simboluri valutare)
-  - 🗂️ Match cu entități din dataseturile externe remapate (CoNLL/WNUT)
-  - 🌐 Interogare SPARQL pe Wikidata (~3000 politicieni)
-- **Label Model** antrenat pe 500 de epoci, cu prag de confidență ≥ 0.7
-- **Extracție de span-uri** precise folosind regex + gazetteer matching
+Data comes from **5 complementary sources**:
 
-### 3. Augmentare Sintetică
+| Source         | Method                                                                                     | Role                                    |
+| -------------- | ------------------------------------------------------------------------------------------ | --------------------------------------- |
+| **CC-News**    | Filtered on politico-economic keywords, processed with spaCy                               | Large volume, linguistic diversity      |
+| **Wikipedia**  | `wikipediaapi` API, articles on politicians, organizations, economic concepts              | High quality, verifiable facts          |
+| **SEC EDGAR**  | Automatically downloaded 10-K filings                                                      | Real financial language                 |
+| **CoNLL-2003** | Remapped from BIO schema (`PER`→`POLITICIAN`, `ORG`→`FINANCIAL_ORG`/`POLITICAL_ORG`, etc.) | Professionally annotated data           |
+| **WNUT-2017**  | Similar remapping to CoNLL                                                                 | Social media texts, stylistic diversity |
 
-Pentru clasele sub-reprezentate (`MARKET_EVENT`, `TRADE_AGREEMENT`, `POLICY`, `LEGISLATION`, `ECONOMIC_INDICATOR`), am generat **exemple sintetice** cu template-uri variate:
+### 2. Weak Supervision with Snorkel
+
+Instead of costly manual annotation, **Snorkel** was used to generate pseudo-labels:
+
+- **14 Labeling Functions (LF)** based on:
+  - 📚 Gazetteers (lists of politicians, organizations, indicators)
+  - 🔍 Regex pattern-matching (political titles, currency symbols)
+  - 🗂️ Match against entities from remapped external datasets (CoNLL/WNUT)
+  - 🌐 SPARQL query on Wikidata (~3,000 politicians)
+- **Label Model** trained for 500 epochs, with confidence threshold ≥ 0.7
+- **Precise span extraction** using regex + gazetteer matching
+
+### 3. Synthetic Augmentation
+
+For underrepresented classes (`MARKET_EVENT`, `TRADE_AGREEMENT`, `POLICY`, `LEGISLATION`, `ECONOMIC_INDICATOR`), **synthetic examples** were generated using varied templates:
 
 ```
 "Analysts compared the recent downturn to the {EVENT}, noting similar warning signs."
@@ -143,63 +145,128 @@ Pentru clasele sub-reprezentate (`MARKET_EVENT`, `TRADE_AGREEMENT`, `POLICY`, `L
 
 ### 4. Fine-tuning
 
-Două arhitecturi antrenate pe **același dataset** pentru **comparație echitabilă**:
+> **Compute environment:** Both models were trained on a dedicated server equipped with an **NVIDIA A40 GPU**.
 
-| | GLiNER | spaCy |
-|---|--------|-------|
-| **Bază** | `urchade/gliner_small-v2.1` | `en_core_web_trf` (RoBERTa-base) |
-| **Strategie** | Fine-tuning complet | Transformer frozen + NER head |
-| **Epoci** | 10 | 1 (+ early stopping, patience=5) |
-| **Batch size** | 8 | 8 (compounding 4→32) |
-| **Learning rate** | 3e-6 | 1e-3 (NER head) |
-| **Zero-shot** | ✅ Da, poate adăuga etichete noi la inferență | ❌ Nu |
-| **Train / Dev / Test** | 5747 / 1228 / 2122 | 5747 / 1228 / 2124 |
+Two architectures trained on the **same dataset** for **fair comparison**:
+
+|                        | GLiNER                                  | spaCy                             |
+| ---------------------- | --------------------------------------- | --------------------------------- |
+| **Base**               | `urchade/gliner_small-v2.1`             | `en_core_web_trf` (RoBERTa-base)  |
+| **Strategy**           | Full fine-tuning                        | Transformer frozen + NER head     |
+| **Epochs**             | 10                                      | 15 (+ early stopping, patience=5) |
+| **Batch size**         | 8                                       | 8 (compounding 4→32)              |
+| **Learning rate**      | 3e-6                                    | 2e-5 (NER head)                   |
+| **Zero-shot**          | ✅ Yes, can add new labels at inference | ❌ No                             |
+| **Train / Dev / Test** | 5747 / 1228 / 2122                      | 5747 / 1228 / 2124                |
 
 ---
 
-## 📊 Rezultate
+## 📊 Results
 
-### Metrici Globale (micro-averaged, modul `ent_type`)
+### Global Metrics (micro-averaged, `ent_type` mode)
 
-| Model | Precision | Recall | F1 |
-|-------|-----------|--------|----|
-| **GLiNER** | 0.6811 | 0.9094 | **0.7789** |
-| **spaCy** | 0.8633 | 0.7891 | **0.8245** |
+| Model      | Precision | Recall | F1         |
+| ---------- | --------- | ------ | ---------- |
+| **GLiNER** | 0.6811    | 0.9094 | **0.7789** |
+| **spaCy**  | 0.8633    | 0.7891 | **0.8245** |
 
-> **Interpretare:** GLiNER are recall mai mare (găsește mai multe entități), iar spaCy are precizie mai mare (mai puține false positive). spaCy câștigă per total la F1.
+> **Interpretation:** GLiNER has higher recall (finds more entities), while spaCy has higher precision (fewer false positives). spaCy wins overall on F1.
 
-### Avantaj unic GLiNER: Zero-Shot Capability
+### GLiNER Unique Advantage: Zero-Shot Capability
 
-GLiNER permite adăugarea de **etichete noi la inferență** fără re-antrenare:
+GLiNER allows adding **new labels at inference** without retraining:
+
 ```
 SANCTION, ELECTION, SUMMIT, CENTRAL_BANK_DECISION
 ```
 
-Acest lucru este posibil datorită arhitecturii sale care operează pe spațiul semantic al etichetelor, nu pe un set fix.
+This is possible due to its architecture that operates in the semantic space of labels rather than a fixed label set.
 
 ---
 
-## 🚀 Quick Start — Rulare Locală
+## ⚡ Quick Deployment — Pre-built Docker Images
 
-### Cu Docker Compose (recomandat)
+> **The fastest way to run the application** — no build step required. Pre-built images are available on Docker Hub.
+
+### Requirements
+
+- [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) installed
+
+### Steps
+
+**1. Pull the pre-built images:**
 
 ```bash
-# Clonează repository-ul
-git clone https://github.com/Tudorx95/NER_Political_Economic.git
-cd NER_Political_Economic/ner-demo
+docker pull tudorx95/ner-political-economic:frontend
+docker pull tudorx95/ner-political-economic:backend
+```
 
-# Pornește toate serviciile (backend + frontend)
+**2. Clone this repository:**
+
+```bash
+git clone https://github.com/Tudorx95/NER_Political_Economic.git
+cd NER_Political_Economic
+```
+
+**3. Start all services using the root-level Compose file:**
+
+```bash
+docker-compose up -d
+```
+
+Open **http://localhost:8080** in your browser.
+
+> ⏱ **First startup** takes a few minutes — models are downloaded from HuggingFace (~500MB) and cached in a Docker volume. Subsequent starts are instant.
+
+---
+
+### Option B — Build from Source
+
+If you prefer to build the images yourself instead of pulling them, use the Compose file inside the `Deployment/` directory:
+
+```bash
+git clone https://github.com/Tudorx95/NER_Political_Economic.git
+cd NER_Political_Economic/Deployment
+
+docker-compose up --build -d
+```
+
+> This will build both the backend and frontend images locally from the Dockerfiles in `Deployment/backend/` and `Deployment/frontend/`.
+
+---
+
+### ⚠️ MongoDB AVX Compatibility Warning
+
+Starting with **MongoDB 5.0**, the database requires a CPU that supports the **AVX (Advanced Vector Extensions)** instruction set. If your machine has an older CPU without AVX support (e.g. Intel Xeon Gold 6240R), the MongoDB container will crash in a restart loop and cause a **502 Bad Gateway** error.
+
+```
+WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system
+does not appear to have that!
+```
+
+---
+
+## 🚀 Quick Start — Local Build
+
+### With Docker Compose (build from source)
+
+```bash
+# Clone the repository
+git clone https://github.com/Tudorx95/NER_Political_Economic.git
+cd NER_Political_Economic/Deployment
+
+# Build and start all services (backend + frontend)
 docker-compose up --build
 ```
 
-Deschide **http://localhost:3000** în browser.
+Open **http://localhost:8080** in your browser.
 
-> ⏱ **Prima pornire** durează câteva minute — se descarcă modelele de pe HuggingFace (~500MB).  
-> Pornirile ulterioare sunt instantanee (modelele sunt cache-uite într-un Docker volume).
+> ⏱ **First startup** takes a few minutes — models are downloaded from HuggingFace (~500MB).  
+> Subsequent starts are instant (models are cached in a Docker volume).
 
-### GPU Support (opțional)
+### GPU Support (optional)
 
-Dacă ai un GPU NVIDIA cu `nvidia-docker` instalat, decomentează secțiunea `deploy` din `docker-compose.yml`:
+If you have an NVIDIA GPU with `nvidia-docker` installed, uncomment the `deploy` section in `docker-compose.yml`:
 
 ```yaml
 deploy:
@@ -211,116 +278,121 @@ deploy:
           capabilities: [gpu]
 ```
 
-### Fără Docker (dezvoltare)
+### Without Docker (development)
 
 **Backend:**
+
 ```bash
-cd ner-demo/backend
+cd Deployment/backend
 pip install -r requirements.txt
-python app.py
-# Server pornit pe http://localhost:8000
+python server.py
+# Server running at http://localhost:8000
 ```
 
 **Frontend:**
+
 ```bash
-cd ner-demo/frontend
+cd Deployment/frontend
 npm install --legacy-peer-deps
 npm start
-# Aplicație pornită pe http://localhost:3000
+# App running at http://localhost:3000
 ```
 
 ---
 
-## 📁 Structura Repository-ului
+## 📁 Repository Structure
 
 ```
 NER_Political_Economic/
 │
-├── 📓 ML Pipeline (Research & Training)
-│   ├── dataset/
-│   │   ├── DatasetCreation.py            # Pipeline complet: colectare → Snorkel → split
-│   │   ├── DatasetCreationV2.ipynb       # Notebook iterația 2
-│   │   ├── DatasetCreation_v3.ipynb      # Notebook iterația 3 (finală)
-│   │   └── synthetic_augmented.jsonl     # Date sintetice augmentate
-│   │
-│   ├── trainer_Gliner.py                 # Training GLiNER complet (cu evaluare + upload HF)
-│   ├── trainer_Spacy.py                  # Training spaCy complet (cu evaluare + upload HF)
-│   ├── GLiNER_Training.ipynb             # Notebook interactiv GLiNER
-│   ├── spaCy_FineTuning.ipynb            # Notebook interactiv spaCy
-│   ├── DownloadModel.py                  # Script test: descarcă și testează modelul GLiNER
-│   └── DownloadSpacy.py                  # Script test: descarcă și testează modelul spaCy
+├── 📁 dataset/                               # Dataset creation pipeline + synthetic data
+│   ├── DatasetCreation.py                    # Main script: collection → Snorkel → split
+│   ├── DatasetCreation.ipynb                 # Iterative pipeline notebook
+│   ├── DatasetCreation_Results.ipynb         # Final dataset statistics and visualizations
+│   ├── synthetic_augmented.jsonl             # Synthetic augmented data
+│   └── README.md                             # Dataset technical documentation
 │
-├── 🖥  Web Application (Deployment)
-│   ├── ner-demo/                         # ← Aplicația principală
-│   │   ├── docker-compose.yml            # Orchestrare containere
-│   │   ├── backend/
-│   │   │   ├── app.py                    # FastAPI — descarcă modele de pe HF + servește inferență
-│   │   │   ├── Dockerfile
-│   │   │   └── requirements.txt
-│   │   ├── frontend/
-│   │   │   ├── src/App.js                # React — UI cu glob animat + entity highlighting
-│   │   │   ├── Dockerfile                # Multi-stage build (React → Nginx)
-│   │   │   └── nginx.conf               # Reverse proxy → backend
-│   │   └── README.md
-│   │
-│   └── Deployment/                       # Versiune alternativă cu MongoDB
-│       ├── docker-compose.yaml           # Include MongoDB pentru persistență
-│       ├── backend/
-│       │   ├── server.py                 # FastAPI + Motor (MongoDB async)
-│       │   └── Dockerfile
-│       ├── frontend/
-│       └── nginx/
+├── 🧠 GLiNER_Results/                        # GLiNER fine-tuning and results
+│   ├── trainer_Gliner.py                     # GLiNER training (evaluation + HF upload)
+│   ├── GLiNER_FineTuning.ipynb               # Interactive GLiNER notebook
+│   ├── DownloadGliner.py                     # Script: download and test GLiNER model
+│   └── metrics.json                          # GLiNER evaluation metrics
 │
-└── README.md                             # ← Acest fișier
+├── 🧠 Spacy_Results/                         # spaCy fine-tuning and results
+│   ├── trainer_Spacy.py                      # spaCy training (evaluation + HF upload)
+│   ├── spaCy_FineTuning.ipynb                # Interactive spaCy notebook
+│   ├── DownloadSpacy.py                      # Script: download and test spaCy model
+│   └── metrics.json                          # spaCy evaluation metrics
+│
+├── 🖥  Deployment/                            # Containerized web application
+│   ├── docker-compose.yaml                   # Container orchestration (backend + frontend + nginx)
+│   ├── backend/
+│   │   ├── server.py                         # FastAPI — GLiNER + spaCy model inference
+│   │   ├── DownloadModel.py                  # Download GLiNER model from HF
+│   │   ├── DownloadSpacy.py                  # Download spaCy model from HF
+│   │   ├── Dockerfile
+│   │   └── requirements.txt
+│   ├── frontend/
+│   │   ├── src/App.js                        # React — animated globe UI + entity highlighting
+│   │   ├── src/components/                   # GlobeView, NERResults, CountryPanel, NERTag
+│   │   ├── Dockerfile                        # Multi-stage build (React → Nginx)
+│   │   └── nginx/nginx.conf                  # Frontend Nginx config
+│   └── nginx/
+│       └── nginx.conf                        # Global reverse proxy
+│
+├── docker-compose.yml                        # ← Quick deployment (pre-built images)
+└── README.md                                 # ← This file
 ```
 
-### Ce face fiecare componentă?
+### What does each component do?
 
-| Componentă | Funcție |
-|-----------|---------|
-| `dataset/DatasetCreation.py` | Pipeline complet de creare a datasetului: colectare din 5 surse → segmentare cu spaCy → Snorkel LabelModel cu 14 LFs → augmentare sintetică → validare + deduplicare → split train/dev/test |
-| `trainer_Gliner.py` | Convertește JSONL→format GLiNER token-span, antrenează cu `gliner.training.Trainer`, evaluează cu `nervaluate`, uploadează pe HuggingFace |
-| `trainer_Spacy.py` | Convertește JSONL→format spaCy `(text, {"entities": [(s,e,label)]})`, antrenează cu transformer frozen + NER head, evaluează, uploadează pe HuggingFace |
-| `ner-demo/backend/app.py` | Server FastAPI: descarcă ambele modele de pe HF la startup, expune `/predict` (per model) și `/predict_both` (compara ambele) |
-| `ner-demo/frontend/src/App.js` | Interfață React cu glob CSS animat, selector de țări, input text editabil, comparare side-by-side GLiNER vs spaCy, suport zero-shot labels |
+| Component                          | Function                                                                                                                                                                                     |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dataset/DatasetCreation.py`       | Full dataset creation pipeline: collection from 5 sources → spaCy segmentation → Snorkel LabelModel with 14 LFs → synthetic augmentation → validation + deduplication → train/dev/test split |
+| `GLiNER_Results/trainer_Gliner.py` | Converts JSONL→GLiNER token-span format, trains with `gliner.training.Trainer`, evaluates with `nervaluate`, uploads to HuggingFace                                                          |
+| `Spacy_Results/trainer_Spacy.py`   | Converts JSONL→spaCy format `(text, {"entities": [(s,e,label)]})`, trains with frozen transformer + NER head, evaluates, uploads to HuggingFace                                              |
+| `Deployment/backend/server.py`     | FastAPI server: downloads both models from HF at startup, exposes `/predict` (per model) and `/predict_both` (compare both)                                                                  |
+| `Deployment/frontend/src/App.js`   | React interface with animated CSS globe, country selector, editable text input, side-by-side GLiNER vs spaCy comparison, zero-shot label support                                             |
 
 ---
 
-## 🛠 Tehnologii Utilizate
+## 🛠 Technologies Used
 
 ### ML Pipeline
-| Tehnologie | Utilizare |
-|-----------|-----------|
-| **Snorkel** | Weak Supervision — Label Model cu 14 Labeling Functions |
-| **GLiNER** | Arhitectură NER zero-shot capable, fine-tuned pe `gliner_small-v2.1` |
-| **spaCy + spacy-transformers** | NER head fine-tuned pe `en_core_web_trf` (RoBERTa-base) |
-| **PyTorch** | Backend deep learning |
-| **nervaluate** | Evaluare NER standardizată (ent_type, strict, partial, exact) |
-| **HuggingFace Hub** | Hosting modele și dataset |
-| **scikit-learn** | Stratified train/dev/test split |
-| **Wikidata SPARQL** | Extindere gazetteer cu ~3000 politicieni |
-| **Wikipedia API** | Colectare texte de calitate |
+
+| Technology                     | Usage                                                                 |
+| ------------------------------ | --------------------------------------------------------------------- |
+| **Snorkel**                    | Weak Supervision — Label Model with 14 Labeling Functions             |
+| **GLiNER**                     | Zero-shot capable NER architecture, fine-tuned on `gliner_small-v2.1` |
+| **spaCy + spacy-transformers** | NER head fine-tuned on `en_core_web_trf` (RoBERTa-base)               |
+| **PyTorch**                    | Deep learning backend                                                 |
+| **nervaluate**                 | Standardized NER evaluation (ent_type, strict, partial, exact)        |
+| **HuggingFace Hub**            | Model and dataset hosting                                             |
+| **scikit-learn**               | Stratified train/dev/test split                                       |
+| **Wikidata SPARQL**            | Gazetteer extension with ~3,000 politicians                           |
+| **Wikipedia API**              | High-quality text collection                                          |
 
 ### Web Application
-| Tehnologie | Utilizare |
-|-----------|-----------|
-| **FastAPI** | REST API cu inferență pe ambele modele |
-| **React** | Frontend cu interfață interactivă |
-| **Docker Compose** | Orchestrare multi-container |
-| **Nginx** | Reverse proxy, servire static assets |
-| **MongoDB** *(opțional)* | Persistență rezultate NER (varianta `Deployment/`) |
+
+| Technology         | Usage                                  |
+| ------------------ | -------------------------------------- |
+| **FastAPI**        | REST API with inference on both models |
+| **React**          | Frontend with interactive interface    |
+| **Docker Compose** | Multi-container orchestration          |
+| **Nginx**          | Reverse proxy, static asset serving    |
+| **MongoDB**        | NER result persistence                 |
 
 ---
 
-## 👤 Autor
+## 👤 Author
 
 **Sd. Sg. Maj. Lepădatu Tudor**  
-Academia Tehnică Militară „Ferdinand I", 2026
+Military Technical Academy "Ferdinand I", 2026
 
 ---
 
 <div align="center">
 
-*Built using Snorkel, GLiNER, spaCy, FastAPI & React*
+_Built using Snorkel, GLiNER, spaCy, FastAPI & React_
 
 </div>
