@@ -132,7 +132,6 @@ async def analyze_ner(request: NERRequest):
 # Keep all other endpoints: /, /countries, /countries/{country}/context, /ner/history
 @api_router.get("/countries")
 async def get_countries():
-    # Poți extinde această listă după bunul plac
     countries_list = ["Libya", "Chad", "Romania", "USA", "Germany", "France", "China"]
     return {"countries": countries_list}
 
