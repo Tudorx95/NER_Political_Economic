@@ -47,9 +47,7 @@ NER_LABELS = [
     "CURRENCY", "TRADE_AGREEMENT", "GPE",
 ]
 
-# Keep your existing COUNTRY_CONTEXTS, DEFAULT_CONTEXT, etc. (copy from original server.py)
-
-# ------------------- Pydantic Models (same as before) -------------------
+# ------------------- Pydantic Models -------------------
 class NERRequest(BaseModel):
     text: str = Field(min_length=1)
     model_type: str = Field(default="compare", pattern="^(spacy|gliner|compare)$")
@@ -105,7 +103,7 @@ def run_gliner(text: str) -> List[Dict]:
         for e in entities
     ]
 
-# ------------------- Endpoints (mostly same) -------------------
+# ------------------- Endpoints -------------------
 @api_router.post("/ner/analyze", response_model=NERResponse)
 async def analyze_ner(request: NERRequest):
     spacy_entities = None
@@ -124,12 +122,10 @@ async def analyze_ner(request: NERRequest):
         model_type=request.model_type,
     )
 
-    # Save to Mongo (optional)
     await db.ner_analyses.insert_one(result.model_dump())
 
     return result
 
-# Keep all other endpoints: /, /countries, /countries/{country}/context, /ner/history
 @api_router.get("/countries")
 async def get_countries():
     countries_list = ["Libya", "Chad", "Romania", "USA", "Germany", "France", "China"]
